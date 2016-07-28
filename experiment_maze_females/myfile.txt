@@ -1,0 +1,2 @@
+/data/Diana/data_node/ethoscope_videos/021aeeee10184bb39b0754e75cef7900/ETHOSCOPE_021/2016-05-10_11-37-40/whole_2016-05-10_11-37-40_021aeeee10184bb39b0754e75cef7900_diana-dam-1-fly-5-etho-21-ctrl_1280x960@25_00000_clean.db
+/data/Diana/data_node/ethoscope_videos/021aeeee10184bb39b0754e75cef7900/ETHOSCOPE_021/2016-05-13_10-50-21/whole_2016-05-13_10-50-21_021aeeee10184bb39b0754e75cef7900_diana-dam-1-fly-5-etho-21-SD_1280x960@25_00000_clean.db
