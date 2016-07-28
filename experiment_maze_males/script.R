@@ -1,8 +1,6 @@
 library(rethomics)
 library(animation)
 setwd("/data/Diana/analyze/experiment_maze_males")
-
-print("hello")
 q <- fread("./query2.csv")
 q <- buildEthoscopeQuery("/data/Diana/data_node/ethoscope_videos", q)
 dt <- loadEthoscopeData(q[status=='ok'])
