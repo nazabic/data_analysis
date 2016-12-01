@@ -1,4 +1,6 @@
 library(rethomics)
+library(poweRlaw)
+library(gsubfn)
 setwd("/home/diana/github/sleep_analysis_experiments/20151106_dyn_sleep_pilot_nobug")
 q <- fread("./query2.csv")
 q[,sdi_f := sprintf("%02d",sdi)]
@@ -36,8 +38,6 @@ maxVelocityClassifierMasked <- function(data,velocity_threshold=.006, delay=6){
 }
 
 
-
-
 dt <- loadEthoscopeData(q[status=="OK" & sdi==0],reference_hour = 9,
                               FUN=sleepAnnotation,
                               motion_classifier_FUN = maxVelocityClassifierMasked)
@@ -49,11 +49,49 @@ dt[, t:= t-days(baseline_days)]
 dt[, hour:= (t %% 86400)/3600]
 
 # select all the data that is before sleep deprivation ( t< 172800) and between specifc hours ( noon to 16 in the afternoon) from baseline
-bdt <- boutAnalysis(moving, dt[hour > 11 & hour < 17 & t < days(1)  & t > days(0)])
+bdt <- boutAnalysis(moving, dt)
+
+bdt[, start_hour:= (start_time %% 86400)/3600]
 
 
 # remove first row in order to avoid the special case where the length of the first bout can be 0
 bdt <- bdt[, .SD[-1,], by = key(dt)]
+
+
+#onemale_bdt <- bdt[start_hour > 9 & start_hour < 12]
+ onemale_bdt <- bdt[experiment_id =='2015-11-06_21-40-35_002aeeee10184bb39b0754e75cef7900.db' & region_id==2 & start_hour > 9 & start_hour < 21]
+
+m_pl = displ$new(onemale_bdt[moving==FALSE & length < 300]$length)
+est = estimate_xmin(m_pl)
+m_pl$setXmin(est)
+plot(m_pl)
+lines(m_pl, col=2)
+
+bs <- bootstrap(m_pl, xmins = seq(1, 100, 5), no_of_sims=100, threads=2)
+
+# x_min uncertainty
+sd(bs$bootstraps[,2])
+
+# alpha uncertainty
+sd(bs$bootstraps[,3])
+
+#check visually as well
+plot(bs, trim =0.1)
+hist(bs$bootstraps[,2])
+hist(bs$bootstraps[,3])
+
+
+
+# we can fit  a power-law to ANY DATA, so let's check if the model is actually plausible
+bs_p = bootstrap_p(m_pl)
+
+# if the p-value is large then the model fits the data, if p-value ~ 0 than another distribution might suit the data better
+p_value_pl = bs_p$p # p-value
+
+plot(bs_p) 
+
+
+
 
 
 

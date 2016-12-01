@@ -3,7 +3,7 @@ library(animation)
 setwd("/data/Diana/analyze/experiment_maze_females")
 q <- fread("./query3.csv")
 q <- buildEthoscopeQuery("/data/Diana/data_node/ethoscope_videos", q)
-dt <- loadEthoscopeData(q)
+dt1 <- loadEthoscopeData(q)
 
 # time each fly spent in the maze
 dt[, .(t_maze = tail(.SD$t, 1)/60), by=key(dt)]
@@ -30,7 +30,7 @@ dt <- dt[, .(x=x, y=y, phi=phi, t=t, w=w, h=h, vx = c(0, diff(.SD$x)/diff(.SD$t)
 
 
 
-dt_one_fly <-dt_15[uid=="3_4_10_TRUE"]
+dt_one_fly <-dt_15[uid=="4_4_1_FALSE"]
 
 
 ggplot(dt_one_fly, aes(x, -y, col=t)) + geom_point() + facet_grid(round ~ uid) 
@@ -63,7 +63,7 @@ p <- dt_15[, .(in_maze=was_in_maze(.SD$x), in_open_arena=was_in_open_arena(.SD$x
 
 
 # To compute percent of flies that went in maze:
-sum(p[sd==T]$in_maze)/length(p[sd==T]$in_maze)*100
+sum(p[sd==T]$in_maze)/length(p[sd==T]$in_maze)*100 
 sum(p[sd==F]$in_maze)/length(p[sd==F]$in_maze)*100
 
 # To compute percentage of flies that were in the open arena

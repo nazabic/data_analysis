@@ -5,6 +5,9 @@ q <- fread("./query2.csv")
 q <- buildEthoscopeQuery("/data/Diana/data_node/ethoscope_videos", q)
 dt <- loadEthoscopeData(q[status=='ok'])
 
+# round the times to two digits because otherwise some will be multiple of 0.04 but others will be 0.399999999999 
+
+dt$t <- round(dt$t, 2)
 
 
 # the first value of dt for each fly is going to be 0 => 60 points that have diff_t = 0 (because we have 6o flies)
